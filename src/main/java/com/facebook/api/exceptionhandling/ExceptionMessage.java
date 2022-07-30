@@ -1,6 +1,7 @@
 package com.facebook.api.exceptionhandling;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.server.MethodNotAllowedException;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ExceptionMessage {
@@ -38,4 +42,12 @@ public class ExceptionMessage {
     }
 
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ErrorMessage invalidArgumentExp(MethodArgumentNotValidException ex) {
+        List list = ex.getBindingResult().getAllErrors().stream()
+                .map(fieldError -> fieldError.getDefaultMessage())
+                .collect(Collectors.toList());
+
+        return new ErrorMessage(HttpStatus.BAD_REQUEST,list.toString());
+    }
 }

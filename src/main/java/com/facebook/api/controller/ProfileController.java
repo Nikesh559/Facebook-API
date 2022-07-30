@@ -1,5 +1,6 @@
 package com.facebook.api.controller;
 
+import com.facebook.api.dto.ContactDTO;
 import com.facebook.api.dto.ProfileDTO;
 import com.facebook.api.model.Member;
 import com.facebook.api.model.Message;
@@ -17,11 +18,9 @@ import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.Duration;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -80,4 +79,11 @@ public class ProfileController {
         return new ResponseEntity(profileService.getProfileCoverPhoto(profileId), HttpStatus.OK);
     }
 
+
+    @PatchMapping(value = "/profile/{profileId}/contact")
+    public ResponseEntity updateContactInfo(@PathVariable("profileId") String profileId,
+                                           @Valid @RequestBody ContactDTO contactDTO) {
+        memberService.updateContactInfo(profileId, contactDTO);
+        return new ResponseEntity(new Message(HttpStatus.OK, "Contact Info Updated."), HttpStatus.OK);
+    }
 }

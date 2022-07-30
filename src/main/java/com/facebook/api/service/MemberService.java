@@ -1,6 +1,7 @@
 package com.facebook.api.service;
 
 import com.facebook.api.controller.ProfileController;
+import com.facebook.api.dto.ContactDTO;
 import com.facebook.api.dto.MemberDTO;
 import com.facebook.api.model.Member;
 import com.facebook.api.repository.MemberRepository;
@@ -10,6 +11,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,5 +61,13 @@ public class MemberService {
 
     public boolean containsKey(String apiKey) {
         return Integer.parseInt(memberRepository.containsKey(apiKey)) > 0;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void updateContactInfo(String profileId, ContactDTO contactDTO) {
+        if(contactDTO.getEmail() != null)
+            memberRepository.updateEmail(profileId, contactDTO.getEmail());
+        if(contactDTO.getPhone() != null)
+            memberRepository.updatePhone(profileId, contactDTO.getPhone());
     }
 }

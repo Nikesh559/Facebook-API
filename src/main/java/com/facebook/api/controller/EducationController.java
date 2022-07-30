@@ -35,7 +35,7 @@ public class EducationController {
         return educationService.getEducation(profileId, eduId);
     }
 
-    @PutMapping("/profile/{profileId}/education/{eduId}")
+    @PostMapping("/profile/{profileId}/education/{eduId}")
     public ResponseEntity updateEducation(@PathVariable("profileId") String profileId, @PathVariable("eduId") String eduId, @RequestBody Education ed) {
         if(educationService.updateEducation(profileId, eduId, ed)) {
             return new ResponseEntity(new Message(HttpStatus.OK, "Profile Updated"), HttpStatus.OK);
