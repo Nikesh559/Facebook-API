@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,7 @@ public class ConnectionReqController {
 
     @GetMapping(value = "/profile/{profileId}/requests")
     public List<ConnectionRequest> getRequests(@PathVariable("profileId")String profileId,
-                                               @RequestParam(value = "status",required = false)RequestStatus requestStatus) {
+                                               @Valid @RequestParam(value = "status",required = false)RequestStatus requestStatus) {
 
         return requestService.getRequests(profileId, requestStatus);
     }
