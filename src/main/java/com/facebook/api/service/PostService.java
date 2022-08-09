@@ -2,12 +2,14 @@ package com.facebook.api.service;
 
 import com.facebook.api.controller.CommentController;
 import com.facebook.api.controller.PostController;
+import com.facebook.api.dto.PostDTO;
 import com.facebook.api.model.Post;
 import com.facebook.api.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -51,5 +53,18 @@ public class PostService {
     }
 
 
-
+    public boolean createPost(String profileId, PostDTO postDTO) {
+        try {
+            Post post = new Post();
+            post.setProfileId(profileId);
+            post.setText(postDTO.getText());
+            post.setPublishedDate(new Date());
+            postRepository.save(post);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return true;
+    }
 }

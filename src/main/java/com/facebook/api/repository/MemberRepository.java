@@ -23,4 +23,11 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     @Modifying
     @Query("UPDATE Member m SET m.phone = :phone WHERE m.profileId = :profileId")
     void updatePhone(@Param("profileId") String profileId,@Param("phone") String phone);
+
+    @Query("SELECT count(1) FROM Member m WHERE m.profileId = :username AND m.password = :password")
+    Integer validate(@Param("username") String username, @Param("password") String password);
+
+    @Modifying
+    @Query("UPDATE Member m SET m.apiKey = :key WHERE m.profileId = :username")
+    void saveApiKey(@Param("username") String username,@Param("key") String key);
 }

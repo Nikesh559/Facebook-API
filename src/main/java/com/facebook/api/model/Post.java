@@ -2,6 +2,7 @@ package com.facebook.api.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.engine.internal.Cascade;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -13,6 +14,8 @@ import java.util.List;
 @Table(name = "post")
 public class Post extends RepresentationModel<Post> {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO,generator="native")
+    @GenericGenerator(name = "native", strategy = "native")
     private Long postId;
 
     @Column(name = "likes")
@@ -33,6 +36,7 @@ public class Post extends RepresentationModel<Post> {
     @JoinColumn(name = "postId")
     private List<Comment> comment;
 
+    @JsonIgnore
     @Column(name = "profileId")
     private String profileId;
 
@@ -78,5 +82,17 @@ public class Post extends RepresentationModel<Post> {
 
     public void setComment(List<Comment> comment) {
         this.comment = comment;
+    }
+
+    public Date getPublishedDate() {
+        return publishedDate;
+    }
+
+    public void setPublishedDate(Date publishedDate) {
+        this.publishedDate = publishedDate;
+    }
+
+    public String getProfileId() {
+        return profileId;
     }
 }
