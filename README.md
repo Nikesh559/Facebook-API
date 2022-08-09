@@ -4,11 +4,14 @@ It is a REST API for user to fetch and modify there account details, search & cr
 * About
 * Technologies used 
 * REST Endpoints
-* Features
-* 
+* Rate Limiting
+* HATOEAS
+* Pagination and Filtering
+
 # Technologies used
 * Java
 * Spring Boot
+* Spring MVC
 * Spring JPA
 * SQL
 
@@ -38,6 +41,15 @@ It is a REST API for user to fetch and modify there account details, search & cr
   * <b> POST Request </b> : 10 request per hour
   * <b> DELETE Request </b> : 5 request per hour
   * <b> PATCH Request </b> : 5 request per hour
+  
+  Response from API contains <b> X-Rate-Limit-Remaining </b> indicating number of request remaining in your bucket. Once you are exhausted of all request check response header <b> X-Rate-Limit-Retry-After-Seconds </b> to find after how many seconds you can make request.
+  
+# HATEOAS (Hypermedia as the Engine of Application State)
+
+
+# Pagination and Filtering 
+
+
 # Getting Started
 
 Login to Generate API Key <br/><br/>
