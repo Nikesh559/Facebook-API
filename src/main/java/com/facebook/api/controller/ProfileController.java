@@ -7,10 +7,6 @@ import com.facebook.api.model.Message;
 import com.facebook.api.model.Profile;
 import com.facebook.api.service.MemberService;
 import com.facebook.api.service.ProfileService;
-import io.github.bucket4j.Bandwidth;
-import io.github.bucket4j.Bucket;
-import io.github.bucket4j.Bucket4j;
-import io.github.bucket4j.Refill;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.Duration;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -53,7 +48,7 @@ public class ProfileController {
             Link coverPhoto = linkTo(methodOn(ProfileController.class).getProfileCoverPhoto(profileId)).withRel("coverPhoto");
             Link workExp = linkTo(methodOn(WorkController.class).getAllWorkById(profileId)).withRel("workExperiences");
             Link educations = linkTo(methodOn(EducationController.class).getEducationList(profileId)).withRel("educations");
-            Link connectionRequest = linkTo(methodOn(ConnectionReqController.class).getRequests(profileId, null)).withRel("invitations");
+            Link connectionRequest = linkTo(methodOn(ConnectionRequestController.class).getRequests(profileId, null)).withRel("invitations");
             Link posts = linkTo(methodOn(PostController.class).getPost(profileId)).withRel("posts");
             profileDTO.add(picture);
             profileDTO.add(coverPhoto);

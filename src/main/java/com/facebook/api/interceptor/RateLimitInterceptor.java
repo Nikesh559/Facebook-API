@@ -17,7 +17,8 @@ import java.util.HashMap;
 
 public class RateLimitInterceptor implements HandlerInterceptor {
 
-    private static HashMap<String, Bucket> cache = new HashMap<>();
+    private static HashMap<String, HashMap> cache = new HashMap<>();
+    private static HashMap<String, Bucket> bucket = new HashMap<>();
 
     @Autowired
     private Gson gson;
@@ -25,12 +26,13 @@ public class RateLimitInterceptor implements HandlerInterceptor {
     @Autowired
     private MemberService memberService;
 
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
         String apiKey = request.getHeader("X-api-key");
         apiKey = apiKey == null ? request.getParameter("apikey") : apiKey;
-        Bucket bucket = getBucket(apiKey);
-
+        Bucket bucket = getBucket(apiKey, request.getMethod());
+        System.out.println("Rate Limiter "+apiKey);
         if(bucket != null) {
 
             ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
@@ -59,17 +61,27 @@ public class RateLimitInterceptor implements HandlerInterceptor {
 
 
 
-    public Bucket getBucket(String apiKey) {
+    private Bucket getBucket(String apiKey, String methodType) {
         if(cache.containsKey(apiKey))
-            return cache.get(apiKey);
+            return (Bucket) cache.get(apiKey).get(methodType);
 
         if(apiKey==null || !memberService.containsKey(apiKey))
             return null;
 
-        Refill refill = Refill.intervally(5, Duration.ofSeconds(10));
-        Bandwidth limit = Bandwidth.classic(5, refill);
+        // Set Refill Rate for GET Method
+        HashMap<String, Bucket> hm = new HashMap<>();
+        hm.put("GET", getBucketForMethod( 50));
+        hm.put("POST", getBucketForMethod( 10));
+        hm.put("PATCH", getBucketForMethod( 5));
+        hm.put("DELETE", getBucketForMethod(5));
+        cache.put(apiKey, hm);
+        return (Bucket)cache.get(apiKey).get(methodType);
+    }
+
+    private Bucket getBucketForMethod(int capacity) {
+        Refill refill = Refill.intervally(capacity, Duration.ofHours(1));
+        Bandwidth limit = Bandwidth.classic(capacity, refill);
         Bucket bucket = Bucket4j.builder().addLimit(limit).build();
-        cache.put(apiKey, bucket);
         return bucket;
     }
 }

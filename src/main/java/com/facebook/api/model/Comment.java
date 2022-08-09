@@ -1,17 +1,17 @@
 package com.facebook.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.hateoas.RepresentationModel;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity(name = "Comment")
 @Table(name = "comment")
 public class Comment extends RepresentationModel<Comment> {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO,generator="native")
+    @GenericGenerator(name = "native", strategy = "native")
     private Long commentId;
 
     @Column(name = "profileId")

@@ -6,6 +6,7 @@ import com.facebook.api.exceptionhandling.ErrorMessage;
 import com.facebook.api.model.ConnectionRequest;
 import com.facebook.api.model.Message;
 import com.facebook.api.service.ConnectionRequestService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,8 +17,9 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@ApiOperation("ConnectionRequestController")
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
-public class ConnectionReqController {
+public class ConnectionRequestController {
 
     @Autowired
     ConnectionRequestService requestService;
