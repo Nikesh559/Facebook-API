@@ -1,7 +1,6 @@
 # Facebook-API
 It is a REST API for user to fetch and modify there account details, search & create posts, accept/reject requests from other members.
 # Table of Contents
-* About
 * Technologies used 
 * REST Endpoints
 * Rate Limiting
